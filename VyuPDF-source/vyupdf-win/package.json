@@ -1,0 +1,77 @@
+{
+  "name": "vyupdf",
+  "version": "1.0.0",
+  "description": "VyuPDF — Lightweight PDF Editor",
+  "main": "src/main.js",
+  "author": {
+    "name": "Vyuhaa Med Data Private Limited",
+    "email": "admin@vyuhaadata.com",
+    "url": "https://www.vyuhaadata.com"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "electron": "^29.4.6",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.vyuhaadata.vyupdf",
+    "productName": "VyuPDF",
+    "copyright": "Copyright © 2026 Vyuhaa Med Data Private Limited",
+    "asar": true,
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      { "from": "assets/", "to": "assets/", "filter": ["**/*"] }
+    ],
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ],
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "VyuPDF",
+      "installerSidebar": "assets/installer-sidebar.bmp",
+      "differentialPackage": false,
+      "displayLanguageSelector": false,
+      "installerLanguages": ["en_US"]
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.png",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png",
+      "category": "Office"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "vyuhaadata",
+      "repo": "vyupdf"
+    }
+  }
+}

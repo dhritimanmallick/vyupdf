@@ -1,0 +1,82 @@
+name: Build VyuPDF
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Windows installer
+        run: npm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: VyuPDF-Windows-Setup
+          path: dist/*.exe
+          retention-days: 30
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*.exe
+          name: VyuPDF ${{ github.ref_name }}
+          body: |
+            ## VyuPDF ${{ github.ref_name }}
+
+            Lightweight PDF editor by Vyuhaa Med Data Private Limited.
+
+            ### Features
+            - Open and edit PDFs
+            - Add text annotations
+            - Add images
+            - Combine PDFs and images
+            - OCR text extraction
+            - Compress and save
+
+            ### Installation
+            Download `VyuPDF-Setup-*.exe` and run it. No other software required.
+
+            ### License
+            Apache 2.0 · Free to use
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VyuPDF-Mac
+          path: dist/*.dmg
+          retention-days: 30
