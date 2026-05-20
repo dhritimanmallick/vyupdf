@@ -5,28 +5,25 @@
 <title>VyuPDF</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#404040;color:#333;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#525659;color:#333;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* Toolbar - Adobe style */
-#tb{background:#323232;height:40px;display:flex;align-items:center;gap:1px;padding:0 8px;flex-shrink:0;border-bottom:1px solid #1a1a1a}
-#appname{font-size:12px;font-weight:600;color:#e0e0e0;margin-right:10px;padding-right:10px;border-right:1px solid #555;white-space:nowrap}
-.tb-grp{display:flex;align-items:center;gap:1px;padding:0 4px;border-right:1px solid #555;margin-right:2px}
-.tb-grp:last-of-type{border-right:none}
-.tbtn{background:none;border:none;color:#ccc;cursor:pointer;padding:5px 8px;border-radius:3px;font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:all .1s;height:30px}
-.tbtn:hover:not(:disabled){background:#4a4a4a;color:#fff}
-.tbtn.on{background:#0064b4;color:#fff}
-.tbtn:disabled{opacity:.35;cursor:not-allowed}
-.tbtn svg{width:14px;height:14px;flex-shrink:0}
+#tb{background:#323232;height:40px;display:flex;align-items:center;gap:1px;padding:0 10px;flex-shrink:0;border-bottom:1px solid #1a1a1a}
+#appname{font-size:13px;font-weight:700;color:#e0e0e0;margin-right:12px;padding-right:12px;border-right:1px solid #555;letter-spacing:.3px}
+.tbg{display:flex;align-items:center;gap:1px;padding:0 4px;border-right:1px solid #555;margin-right:2px}
+.tbg:last-of-type{border:none}
+.tb{background:none;border:none;color:#ccc;cursor:pointer;padding:5px 9px;border-radius:3px;font-size:11px;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:all .1s;height:30px}
+.tb:hover:not(:disabled){background:#4a4a4a;color:#fff}
+.tb.on{background:#0064b4;color:#fff}
+.tb:disabled{opacity:.35;cursor:not-allowed}
+.tb svg{width:14px;height:14px;flex-shrink:0}
 #fi{margin-left:auto;font-size:10px;color:#999;padding-left:8px;white-space:nowrap}
 
-/* Layout */
 #main{display:flex;flex:1;overflow:hidden}
 
-/* Left sidebar - thumbnails */
-#sb{width:136px;background:#2b2b2b;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;flex-shrink:0}
+#sb{width:130px;background:#2b2b2b;border-right:1px solid #1a1a1a;display:flex;flex-direction:column;flex-shrink:0}
 #sbh{padding:7px 10px;font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between}
-#pl{flex:1;overflow-y:auto;padding:6px;background:#2b2b2b;scrollbar-width:thin;scrollbar-color:#555 transparent}
-.th{border:2px solid transparent;border-radius:3px;margin-bottom:6px;cursor:pointer;overflow:hidden;background:#1a1a1a;position:relative;transition:border-color .1s}
+#pl{flex:1;overflow-y:auto;padding:6px;scrollbar-width:thin;scrollbar-color:#555 transparent}
+.th{border:2px solid transparent;border-radius:3px;margin-bottom:6px;cursor:pointer;overflow:hidden;background:#1a1a1a;position:relative}
 .th:hover{border-color:#888}
 .th.sel{border-color:#0064b4}
 .th canvas{width:100%;height:auto;display:block}
@@ -34,39 +31,56 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .th .pd{position:absolute;top:2px;right:2px;background:rgba(180,30,30,.9);color:#fff;border:none;border-radius:2px;width:14px;height:14px;font-size:9px;cursor:pointer;display:none;align-items:center;justify-content:center}
 .th:hover .pd{display:flex}
 
-/* Canvas - WHITE background like Adobe */
-#cw{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:#606060;position:relative;scrollbar-width:thin;scrollbar-color:#888 transparent}
-#pc{position:relative;box-shadow:0 2px 12px rgba(0,0,0,.5);display:inline-block;background:#fff}
+#cw{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:24px;background:#525659;position:relative;scrollbar-width:thin;scrollbar-color:#888 transparent}
+#pc{position:relative;box-shadow:0 2px 16px rgba(0,0,0,.6);display:inline-block;background:#fff}
 #cv{display:block;background:#fff}
-#ov{position:absolute;top:0;left:0;pointer-events:none;overflow:hidden}
+#ov{position:absolute;top:0;left:0;pointer-events:none}
 
-/* Annotations */
-.an{position:absolute}
-.an.selected .ann-handle{display:flex}
-.ann-wrap{position:relative}
-.ann-handle{position:absolute;top:-24px;right:0;display:none;gap:3px;background:#333;border-radius:3px;padding:2px 4px;z-index:10}
-.ann-handle button{background:none;border:none;color:#ccc;cursor:pointer;font-size:10px;padding:1px 4px;border-radius:2px}
-.ann-handle button:hover{background:#555;color:#fff}
-.at{background:rgba(255,255,150,.92);border:1px solid #cca800;padding:3px 7px;font-size:14px;color:#111;border-radius:2px;min-width:30px;min-height:22px;outline:none;word-break:break-word;white-space:pre-wrap;cursor:text;-webkit-user-select:text;user-select:text;line-height:1.4}
-.ai-wrap{position:relative}
-.ai-wrap img{display:block;border:1px solid #0064b4}
-.rz{position:absolute;width:8px;height:8px;background:#0064b4;border-radius:50%;cursor:se-resize}
-.rz-se{bottom:-4px;right:-4px}
-.rz-sw{bottom:-4px;left:-4px;cursor:sw-resize}
-.rz-ne{top:-4px;right:-4px;cursor:ne-resize}
-.rz-nw{top:-4px;left:-4px;cursor:nw-resize}
-.drag-cursor{cursor:move}
+/* Annotations — NO yellow background by default */
+.an{position:absolute;cursor:default}
+.an:hover .ann-del{display:block}
+.ann-del{position:absolute;top:-20px;right:0;background:#c00;color:#fff;border:none;border-radius:3px;padding:1px 7px;font-size:9px;cursor:pointer;display:none;white-space:nowrap;z-index:20;line-height:18px}
+.ann-del:hover{background:#a00}
 
-/* Empty state */
-#em{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:#aaa}
-#em svg{opacity:.3;width:64px;height:64px}
-#em h2{font-size:16px;color:#bbb}
-#em p{font-size:12px;text-align:center;max-width:240px;line-height:1.6;color:#999}
-.ob{background:#0064b4;color:#fff;border:none;padding:8px 20px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;margin-top:4px}
+/* Text annotation - transparent like Adobe */
+.at{
+  background:transparent;
+  border:none;
+  padding:2px 4px;
+  font-size:14px;
+  color:#000;
+  outline:none;
+  word-break:break-word;
+  white-space:pre-wrap;
+  cursor:move;
+  -webkit-user-select:text;
+  user-select:text;
+  min-width:30px;
+  min-height:1em;
+  line-height:1.4;
+}
+.at:focus{
+  background:rgba(0,100,180,.05);
+  border:1px dashed rgba(0,100,180,.4);
+  cursor:text;
+}
+.an.moving .at{cursor:move !important;}
+
+/* Image annotation */
+.ai{display:block;cursor:move}
+.ai-wrap{position:relative;display:inline-block}
+.ai-wrap img{display:block;border:none}
+.an.sel-ann .ai-wrap img{outline:2px solid #0064b4}
+.rz{position:absolute;bottom:-5px;right:-5px;width:10px;height:10px;background:#0064b4;border-radius:50%;cursor:se-resize;z-index:5}
+
+#em{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:#bbb}
+#em svg{opacity:.25;width:56px;height:56px}
+#em h2{font-size:16px;color:#ccc}
+#em p{font-size:11px;text-align:center;max-width:220px;line-height:1.6;color:#aaa}
+.ob{background:#0064b4;color:#fff;border:none;padding:8px 20px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;margin-top:2px}
 .ob:hover{background:#0078d4}
 
-/* Right panel - properties */
-#rp{width:200px;background:#f0f0f0;border-left:1px solid #ccc;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+#rp{width:195px;background:#f0f0f0;border-left:1px solid #ccc;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
 .ps{padding:10px 12px;border-bottom:1px solid #ddd}
 .pt{font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
 .pl{font-size:10px;color:#666;display:block;margin-bottom:3px}
@@ -77,77 +91,62 @@ input[type=range]{width:100%;accent-color:#0064b4;margin-bottom:2px}
 .pb:hover{background:#e8e8e8;border-color:#999}
 .pb svg{width:12px;height:12px;flex-shrink:0;color:#0064b4}
 .pb.del:hover{background:#fde8e8;border-color:#dc3545;color:#dc3545}
-#oc{background:#fff;border:1px solid #ddd;border-radius:3px;padding:6px;font-size:10px;color:#555;min-height:70px;max-height:160px;overflow-y:auto;white-space:pre-wrap;line-height:1.5}
+#oc{background:#fff;border:1px solid #ddd;border-radius:3px;padding:6px;font-size:10px;color:#555;min-height:60px;max-height:140px;overflow-y:auto;white-space:pre-wrap;line-height:1.5}
 
-/* Status */
 #st{height:22px;background:#323232;border-top:1px solid #1a1a1a;display:flex;align-items:center;padding:0 10px;gap:14px;font-size:10px;color:#aaa;flex-shrink:0}
-
-/* Zoom */
-#zm{position:fixed;bottom:28px;right:208px;display:flex;align-items:center;gap:2px;background:#323232;border:1px solid #555;border-radius:4px;padding:3px}
+#zm{position:fixed;bottom:28px;right:203px;display:flex;align-items:center;gap:2px;background:#323232;border:1px solid #555;border-radius:4px;padding:3px}
 .zb{background:none;border:none;color:#aaa;cursor:pointer;width:24px;height:24px;border-radius:3px;font-size:13px;display:flex;align-items:center;justify-content:center}
 .zb:hover{background:#4a4a4a;color:#fff}
 #zl{font-size:10px;color:#aaa;padding:0 5px;min-width:38px;text-align:center}
-
-/* Progress */
 #pgb{position:fixed;top:40px;left:0;right:0;height:2px;background:#0064b4;display:none;z-index:999}
+
+/* Compress modal */
+#cmp-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
+#cmp-modal.show{display:flex}
+#cmp-inner{background:#fff;border-radius:6px;padding:20px;width:300px;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+#cmp-inner h3{font-size:14px;font-weight:600;color:#333;margin-bottom:14px}
+#cmp-inner label{font-size:11px;color:#555;display:block;margin-bottom:4px}
+#cmp-inner input[type=range]{width:100%;accent-color:#0064b4;margin-bottom:4px}
+#cmp-inner .hint{font-size:10px;color:#999;margin-bottom:14px}
+.cmp-btns{display:flex;gap:8px;justify-content:flex-end}
+.cmp-btns button{padding:6px 16px;border-radius:4px;font-size:12px;cursor:pointer;border:1px solid #ccc;background:#fff;color:#333}
+.cmp-btns .primary{background:#0064b4;color:#fff;border-color:#0064b4}
+.cmp-btns .primary:hover{background:#0078d4}
 </style>
 </head>
 <body>
 <div id="pgb"></div>
 
-<!-- Toolbar -->
 <div id="tb">
   <span id="appname">VyuPDF</span>
-
-  <div class="tb-grp">
-    <button class="tbtn" onclick="openFile()" title="Open (Ctrl+O)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Open
-    </button>
-    <button class="tbtn" id="bs" onclick="doSave()" disabled title="Save (Ctrl+S)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save
-    </button>
-    <button class="tbtn" id="bsa" onclick="doSaveAs()" disabled title="Save As">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save As
-    </button>
+  <div class="tbg">
+    <button class="tb" onclick="openFile()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Open</button>
+    <button class="tb" id="bs" onclick="doSave()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save</button>
+    <button class="tb" id="bsa" onclick="doSaveAs()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save As</button>
   </div>
-
-  <div class="tb-grp">
-    <button class="tbtn" id="bt" onclick="setTool('text')" disabled title="Add text (T)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Add Text
-    </button>
-    <button class="tbtn" id="bi" onclick="addImg()" disabled title="Add image">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Add Image
-    </button>
+  <div class="tbg">
+    <button class="tb" id="bt" onclick="setTool('text')" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Add Text</button>
+    <button class="tb" id="bi" onclick="addImg()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Add Image</button>
   </div>
-
-  <div class="tb-grp">
-    <button class="tbtn" id="bap" onclick="addPages()" disabled title="Add pages">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Pages
-    </button>
-    <button class="tbtn" id="bo" onclick="runOCR()" disabled title="Extract text (OCR)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>OCR
-    </button>
-    <button class="tbtn" id="bc" onclick="doCompress()" disabled title="Compress PDF">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>Compress
-    </button>
+  <div class="tbg">
+    <button class="tb" id="bap" onclick="addPages()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Pages</button>
+    <button class="tb" id="bo" onclick="runOCR()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>OCR</button>
+    <button class="tb" id="bc" onclick="showCompress()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>Compress</button>
   </div>
-
   <div id="fi">No file open</div>
 </div>
 
 <div id="main">
-  <!-- Sidebar thumbnails -->
   <div id="sb">
     <div id="sbh"><span>Pages</span><span id="pgc" style="color:#6af">0</span></div>
     <div id="pl"></div>
   </div>
 
-  <!-- Canvas - white PDF area -->
   <div id="cw" ondragover="event.preventDefault()" ondrop="onDrop(event)">
     <div id="em">
-      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2h28l14 14v44a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><polyline points="42 2 42 16 56 16"/><line x1="20" y1="32" x2="44" y2="32"/><line x1="20" y1="40" x2="44" y2="40"/><line x1="20" y1="24" x2="32" y2="24"/></svg>
+      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2h28l14 14v44a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><polyline points="42 2 42 16 56 16"/><line x1="20" y1="32" x2="44" y2="32"/><line x1="20" y1="40" x2="44" y2="40"/></svg>
       <h2>VyuPDF</h2>
-      <p>Open a PDF to start editing<br/>or drag and drop here</p>
+      <p>Open a PDF or drag and drop here</p>
       <button class="ob" onclick="openFile()">Open PDF</button>
     </div>
     <div id="pc" style="display:none">
@@ -156,14 +155,17 @@ input[type=range]{width:100%;accent-color:#0064b4;margin-bottom:2px}
     </div>
   </div>
 
-  <!-- Right panel -->
   <div id="rp">
     <div class="ps">
-      <div class="pt">Text</div>
-      <label class="pl">Font Size — <span id="fsv">14</span>pt</label>
-      <input type="range" id="fs" min="6" max="72" value="14" oninput="document.getElementById('fsv').textContent=this.value;updateSel()"/>
+      <div class="pt">Text Options</div>
+      <label class="pl">Size — <span id="fsv">14</span>pt</label>
+      <input type="range" id="fs" min="6" max="72" value="14" oninput="document.getElementById('fsv').textContent=this.value;updateSelText()"/>
       <label class="pl" style="margin-top:4px">Color</label>
-      <input type="color" id="tc" value="#000000" class="pi" style="height:28px;padding:1px 3px;cursor:pointer" oninput="updateSel()"/>
+      <input type="color" id="tc" value="#000000" class="pi" style="height:28px;padding:1px 3px;cursor:pointer" oninput="updateSelText()"/>
+      <label class="pl" style="margin-top:4px">Font</label>
+      <select id="ff" class="pi" onchange="updateSelText()">
+        <option>Helvetica</option><option>Times New Roman</option><option>Courier New</option><option>Arial</option>
+      </select>
     </div>
     <div class="ps">
       <div class="pt">Page</div>
@@ -184,15 +186,13 @@ input[type=range]{width:100%;accent-color:#0064b4;margin-bottom:2px}
   </div>
 </div>
 
-<!-- Zoom -->
 <div id="zm">
   <button class="zb" onclick="doZoom(-.25)">−</button>
   <span id="zl">100%</span>
   <button class="zb" onclick="doZoom(.25)">+</button>
-  <button class="zb" onclick="setZoom(1)" title="Fit">⊡</button>
+  <button class="zb" onclick="setZoom(1)">⊡</button>
 </div>
 
-<!-- Status -->
 <div id="st">
   <span id="sf">No file open</span>
   <span id="spg"></span>
@@ -200,15 +200,28 @@ input[type=range]{width:100%;accent-color:#0064b4;margin-bottom:2px}
   <span style="margin-left:auto" id="sm"></span>
 </div>
 
+<!-- Compress modal -->
+<div id="cmp-modal">
+  <div id="cmp-inner">
+    <h3>Compress PDF</h3>
+    <label>Compression level — <span id="cmp-val">Medium</span></label>
+    <input type="range" id="cmp-lvl" min="1" max="3" value="2" step="1" oninput="updateCmpLabel()"/>
+    <p class="hint" id="cmp-hint">Balances file size and quality. Good for most documents.</p>
+    <div class="cmp-btns">
+      <button onclick="document.getElementById('cmp-modal').classList.remove('show')">Cancel</button>
+      <button class="primary" onclick="doCompress()">Compress & Save</button>
+    </div>
+  </div>
+</div>
+
 <script src="../node_modules/pdf-lib/dist/pdf-lib.min.js"></script>
 <script>
-// Load PDF.js
 function ldScript(src){return new Promise((r,j)=>{const s=document.createElement('script');s.src=src;s.onload=r;s.onerror=j;document.head.appendChild(s);})}
-
 const {PDFDocument,rgb,StandardFonts}=PDFLib;
+
 let pdfDoc=null,pdfJSDoc=null,curPage=0,zoom=1;
 let tool=null,anns={},dirty=false,pgCount=0,fileName='document.pdf';
-let selEl=null; // selected annotation element
+let selAnn=null,isDragging=false;
 
 async function init(){
   try{
@@ -221,7 +234,7 @@ async function init(){
       const m={'open':openFile,'save':doSave,'save-as':doSaveAs,
         'tool-text':()=>setTool('text'),'add-image':addImg,'add-pages':addPages,
         'page-up':()=>movePg(-1),'page-down':()=>movePg(1),'page-delete':delPage,
-        'ocr':runOCR,'compress':doCompress,
+        'ocr':runOCR,'compress':showCompress,
         'zoom-in':()=>doZoom(.25),'zoom-out':()=>doZoom(-.25),'zoom-reset':()=>setZoom(1),
       };
       if(m[a])m[a]();
@@ -229,40 +242,30 @@ async function init(){
   }
 
   document.addEventListener('keydown',e=>{
-    const m=e.ctrlKey||e.metaKey;
-    if(m&&e.key==='o'){e.preventDefault();openFile();}
-    if(m&&!e.shiftKey&&e.key==='s'){e.preventDefault();doSave();}
-    if(m&&e.shiftKey&&e.key==='S'){e.preventDefault();doSaveAs();}
-    if(e.key==='t'&&!e.ctrlKey&&!e.metaKey&&document.activeElement.tagName!=='INPUT'){setTool('text');}
-    if(e.key==='Escape'){setTool(null);deselect();}
-    if((e.key==='Delete'||e.key==='Backspace')&&selEl&&document.activeElement.tagName!=='DIV'){
-      e.preventDefault(); removeAnn(selEl);
-    }
-    if(m&&(e.key==='='||e.key==='+')){e.preventDefault();doZoom(.25);}
-    if(m&&e.key==='-'){e.preventDefault();doZoom(-.25);}
-    if(m&&e.key==='0'){e.preventDefault();setZoom(1);}
-  });
-
-  // Click outside deselects
-  document.getElementById('cw').addEventListener('mousedown',e=>{
-    if(e.target===document.getElementById('cw')||e.target===document.getElementById('pc')||e.target===document.getElementById('cv'))
-      deselect();
+    const mod=e.ctrlKey||e.metaKey;
+    if(mod&&e.key==='o'){e.preventDefault();openFile();}
+    if(mod&&!e.shiftKey&&e.key==='s'){e.preventDefault();doSave();}
+    if(mod&&e.shiftKey&&e.key==='S'){e.preventDefault();doSaveAs();}
+    if(e.key==='Escape'){setTool(null);}
+    if((e.key==='Delete')&&selAnn&&!isEditing()){removeAnn(selAnn);}
+    if(mod&&(e.key==='='||e.key==='+')){e.preventDefault();doZoom(.25);}
+    if(mod&&e.key==='-'){e.preventDefault();doZoom(-.25);}
+    if(mod&&e.key==='0'){e.preventDefault();setZoom(1);}
   });
 }
 
-// ── Progress & msg ─────────────────────────────────────────────
-function prog(p){const e=document.getElementById('pgb');if(p>=100){setTimeout(()=>e.style.display='none',500);e.style.width='100%';return;}e.style.display='block';e.style.width=p+'%';}
+function isEditing(){return document.activeElement&&document.activeElement.contentEditable==='true';}
+
+function prog(p){const e=document.getElementById('pgb');if(p>=100){setTimeout(()=>e.style.display='none',400);e.style.width='100%';return;}e.style.display='block';e.style.width=p+'%';}
 function msg(m){document.getElementById('sm').textContent=m;}
 function enableAll(on){['bs','bsa','bt','bi','bap','bo','bc'].forEach(id=>document.getElementById(id).disabled=!on);}
 
-// ── Open ───────────────────────────────────────────────────────
 async function openFile(){
   if(!window.api)return;
   const r=await window.api.openDialog({title:'Open PDF',filters:[{name:'PDF',extensions:['pdf']}],properties:['openFile']});
   if(r.canceled||!r.filePaths[0])return;
   fileName=r.filePaths[0].split(/[\\/]/).pop();
-  const buf=await window.api.readFile(r.filePaths[0]);
-  await load(buf);
+  await load(await window.api.readFile(r.filePaths[0]));
 }
 async function onDrop(e){
   e.preventDefault();
@@ -273,7 +276,7 @@ async function load(buf){
   try{
     msg('Loading…');prog(15);
     const arr=buf instanceof ArrayBuffer?buf:buf.buffer.slice(buf.byteOffset,buf.byteOffset+buf.byteLength);
-    pdfDoc=await PDFDocument.load(arr,{ignoreEncryption:true});prog(45);
+    pdfDoc=await PDFDocument.load(arr,{ignoreEncryption:true});prog(50);
     pdfJSDoc=await pdfjsLib.getDocument({data:new Uint8Array(arr)}).promise;prog(80);
     pgCount=pdfDoc.getPageCount();anns={};curPage=0;dirty=false;
     document.getElementById('em').style.display='none';
@@ -286,71 +289,51 @@ async function load(buf){
   }catch(e){msg('Error: '+e.message);prog(100);}
 }
 
-// ── Render ─────────────────────────────────────────────────────
 async function renderPage(idx){
-  curPage=idx;
+  curPage=idx;selAnn=null;
   document.getElementById('spg').textContent=`Page ${idx+1} / ${pgCount}`;
   const page=await pdfJSDoc.getPage(idx+1);
   const vp=page.getViewport({scale:zoom*1.5});
   const c=document.getElementById('cv');
-  c.width=vp.width;c.height=vp.height;
-  c.style.background='#fff';
+  c.width=vp.width;c.height=vp.height;c.style.background='#fff';
   await page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
   const ov=document.getElementById('ov');
   ov.style.width=vp.width+'px';ov.style.height=vp.height+'px';
-  ov.innerHTML='';selEl=null;
+  ov.innerHTML='';
   if(anns[idx])anns[idx].forEach(a=>ov.appendChild(a.el));
   document.querySelectorAll('.th').forEach((t,i)=>t.classList.toggle('sel',i===idx));
 }
 
 async function renderThumbs(){
-  const list=document.getElementById('pl');
-  list.innerHTML='';
+  const list=document.getElementById('pl');list.innerHTML='';
   document.getElementById('pgc').textContent=pgCount;
   for(let i=0;i<pgCount;i++){
     const pg=await pdfJSDoc.getPage(i+1);
-    const vp=pg.getViewport({scale:.22});
-    const c=document.createElement('canvas');
-    c.width=vp.width;c.height=vp.height;
+    const vp=pg.getViewport({scale:.2});
+    const c=document.createElement('canvas');c.width=vp.width;c.height=vp.height;
     await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
-    const div=document.createElement('div');div.className='th';div.dataset.i=i;
+    const div=document.createElement('div');div.className='th';
     div.appendChild(c);
     const pn=document.createElement('span');pn.className='pn';pn.textContent=i+1;div.appendChild(pn);
     const pd=document.createElement('button');pd.className='pd';pd.textContent='×';
-    pd.onclick=ev=>{ev.stopPropagation();delPageAt(i);};
-    div.appendChild(pd);
-    div.onclick=()=>{deselect();renderPage(i);};
+    pd.onclick=ev=>{ev.stopPropagation();delPageAt(i);};div.appendChild(pd);
+    div.onclick=()=>renderPage(i);
     list.appendChild(div);
   }
 }
 
-// ── Selection ──────────────────────────────────────────────────
-function select(el){
-  deselect();
-  selEl=el;
-  el.classList.add('selected');
-}
-function deselect(){
-  if(selEl){selEl.classList.remove('selected');selEl=null;}
-}
-function removeAnn(el){
-  if(!el)return;
-  if(anns[curPage])anns[curPage]=anns[curPage].filter(a=>a.el!==el);
-  el.remove();selEl=null;dirty=true;
-}
-
-// ── Tool ───────────────────────────────────────────────────────
+// ── Tool ──────────────────────────────────────────────────────
 function setTool(t){
   tool=tool===t?null:t;
   document.getElementById('bt').classList.toggle('on',tool==='text');
-  document.getElementById('stool').textContent=tool?`Tool: ${tool} — click on page`:'';
+  document.getElementById('stool').textContent=tool?`Tool: Add ${tool} — click on page`:'';
   const ov=document.getElementById('ov');
   ov.style.pointerEvents=tool?'all':'none';
   ov.style.cursor=tool==='text'?'text':'default';
   ov.onclick=tool==='text'?placeText:null;
 }
 
-// ── Text annotation ────────────────────────────────────────────
+// ── Text ──────────────────────────────────────────────────────
 function placeText(e){
   const ov=document.getElementById('ov');
   const r=ov.getBoundingClientRect();
@@ -358,93 +341,163 @@ function placeText(e){
 
   const wrap=document.createElement('div');
   wrap.className='an';
-  wrap.style.cssText=`position:absolute;left:${x}px;top:${y}px`;
+  wrap.style.cssText=`position:absolute;left:${x}px;top:${y}px;min-width:60px`;
+
+  // Delete button (shows on hover)
+  const del=document.createElement('button');
+  del.className='ann-del';del.textContent='✕ Delete';
+  del.onclick=ev=>{ev.stopPropagation();removeAnn(wrap);};
+  wrap.appendChild(del);
 
   const el=document.createElement('div');
-  el.className='at';
-  el.contentEditable='true';
-  el.textContent='Type here';
+  el.className='at';el.contentEditable='true';
   el.style.fontSize=document.getElementById('fs').value+'px';
   el.style.color=document.getElementById('tc').value;
+  el.style.fontFamily=document.getElementById('ff').value;
+  el.textContent='Type here';
 
   wrap.appendChild(el);
-
-  // Delete button on hover
-  const del=document.createElement('button');
-  del.textContent='✕ Delete';del.title='Delete (Del key)';
-  del.style.cssText='position:absolute;top:-22px;right:0;background:#c00;color:#fff;border:none;border-radius:2px;padding:1px 6px;font-size:9px;cursor:pointer;display:none;white-space:nowrap;z-index:10';
-  wrap.appendChild(del);
-  wrap.addEventListener('mouseenter',()=>del.style.display='block');
-  wrap.addEventListener('mouseleave',()=>del.style.display='none');
-  del.onclick=()=>removeAnn(wrap);
-
-  makeDrag(wrap, el);
+  makeDragText(wrap,el);
   ov.appendChild(wrap);
-  el.focus();document.execCommand('selectAll',false,null);
+
+  // Focus and select all
+  setTimeout(()=>{el.focus();document.execCommand('selectAll',false,null);},10);
 
   if(!anns[curPage])anns[curPage]=[];
   anns[curPage].push({el:wrap,type:'text',textEl:el});
-  dirty=true;
-
-  wrap.addEventListener('mousedown',ev=>{if(ev.target!==el){select(wrap);}});
+  selAnn=wrap;dirty=true;
 }
 
-function updateSel(){
-  if(!selEl)return;
-  const el=selEl.querySelector('.at');
-  if(el){
-    el.style.fontSize=document.getElementById('fs').value+'px';
-    el.style.color=document.getElementById('tc').value;
-  }
+function updateSelText(){
+  if(!selAnn)return;
+  const el=selAnn.querySelector('.at');
+  if(!el)return;
+  el.style.fontSize=document.getElementById('fs').value+'px';
+  el.style.color=document.getElementById('tc').value;
+  el.style.fontFamily=document.getElementById('ff').value;
 }
 
-// ── Image annotation ───────────────────────────────────────────
+// ── Image ─────────────────────────────────────────────────────
 async function addImg(){
   if(!window.api)return;
   const r=await window.api.openDialog({title:'Add Image',filters:[{name:'Images',extensions:['jpg','jpeg','png','webp','bmp','gif']}],properties:['openFile']});
   if(r.canceled||!r.filePaths[0])return;
+
   const buf=await window.api.readFile(r.filePaths[0]);
   const ext=r.filePaths[0].split('.').pop().toLowerCase();
   const mime=ext==='png'?'image/png':'image/jpeg';
-  const blob=new Blob([buf],{type:mime});
+  const blob=new Blob([buf instanceof ArrayBuffer?buf:buf.buffer],{type:mime});
   const url=URL.createObjectURL(blob);
 
   const ov=document.getElementById('ov');
   const wrap=document.createElement('div');
   wrap.className='an';
-  wrap.style.cssText='position:absolute;left:50px;top:50px';
+  wrap.style.cssText='position:absolute;left:60px;top:60px';
+
+  const del=document.createElement('button');
+  del.className='ann-del';del.textContent='✕ Delete';
+  del.onclick=ev=>{ev.stopPropagation();removeAnn(wrap);};
+  wrap.appendChild(del);
+
+  const imgWrap=document.createElement('div');
+  imgWrap.className='ai-wrap';
 
   const imgEl=document.createElement('img');
   imgEl.src=url;imgEl.draggable=false;
-  imgEl.style.cssText='width:220px;height:auto;display:block;border:2px solid #0064b4;cursor:move';
+  imgEl.style.cssText='width:200px;height:auto;display:block;cursor:move';
 
-  // Resize handle
-  const rz=document.createElement('div');
-  rz.className='rz rz-se';
+  const rz=document.createElement('div');rz.className='rz';
 
-  // Delete button
-  const del=document.createElement('button');
-  del.textContent='✕ Delete';
-  del.style.cssText='position:absolute;top:-22px;right:0;background:#c00;color:#fff;border:none;border-radius:2px;padding:1px 6px;font-size:9px;cursor:pointer;display:none;white-space:nowrap;z-index:10';
-  wrap.appendChild(del);
-  wrap.addEventListener('mouseenter',()=>del.style.display='block');
-  wrap.addEventListener('mouseleave',()=>del.style.display='none');
-  del.onclick=()=>removeAnn(wrap);
+  imgWrap.appendChild(imgEl);imgWrap.appendChild(rz);
+  wrap.appendChild(imgWrap);
 
-  wrap.appendChild(imgEl);wrap.appendChild(rz);
-
-  makeDrag(wrap, imgEl);
-  makeResize(imgEl, rz);
+  // Drag on image
+  makeDragImg(wrap,imgEl);
+  makeResize(imgEl,rz);
 
   ov.appendChild(wrap);
-  select(wrap);
-
+  selAnn=wrap;
   if(!anns[curPage])anns[curPage]=[];
   anns[curPage].push({el:wrap,type:'image',buf,mime,imgEl});
   dirty=true;
+  msg('Image added — drag to move, corner handle to resize');
 }
 
-// ── Add pages ──────────────────────────────────────────────────
+// ── Drag for text ─────────────────────────────────────────────
+function makeDragText(wrap,textEl){
+  let dragging=false,ox,oy,sx,sy;
+
+  wrap.addEventListener('mousedown',e=>{
+    if(e.target===textEl||e.target.tagName==='BUTTON')return;
+    startDrag(e,wrap);
+  });
+
+  // Drag text el only when not focused
+  textEl.addEventListener('mousedown',e=>{
+    if(document.activeElement===textEl)return; // editing — don't drag
+    e.preventDefault();
+    startDrag(e,wrap);
+  });
+
+  function startDrag(e,wrap){
+    e.preventDefault();
+    selAnn=wrap;
+    ox=parseFloat(wrap.style.left)||0;oy=parseFloat(wrap.style.top)||0;
+    sx=e.clientX;sy=e.clientY;
+    const mv=e2=>{
+      wrap.style.left=(ox+e2.clientX-sx)+'px';
+      wrap.style.top=(oy+e2.clientY-sy)+'px';
+    };
+    const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);dirty=true;};
+    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+  }
+}
+
+// ── Drag for image ────────────────────────────────────────────
+function makeDragImg(wrap,imgEl){
+  imgEl.addEventListener('mousedown',e=>{
+    if(e.target.classList.contains('rz'))return;
+    e.preventDefault();
+    selAnn=wrap;
+    const ox=parseFloat(wrap.style.left)||0,oy=parseFloat(wrap.style.top)||0;
+    const sx=e.clientX,sy=e.clientY;
+    const mv=e2=>{
+      wrap.style.left=(ox+e2.clientX-sx)+'px';
+      wrap.style.top=(oy+e2.clientY-sy)+'px';
+    };
+    const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);dirty=true;};
+    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+  });
+
+  wrap.addEventListener('mousedown',e=>{
+    if(e.target===imgEl||e.target.classList.contains('rz')||e.target.tagName==='BUTTON')return;
+    e.preventDefault();
+    selAnn=wrap;
+    const ox=parseFloat(wrap.style.left)||0,oy=parseFloat(wrap.style.top)||0;
+    const sx=e.clientX,sy=e.clientY;
+    const mv=e2=>{wrap.style.left=(ox+e2.clientX-sx)+'px';wrap.style.top=(oy+e2.clientY-sy)+'px';};
+    const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);dirty=true;};
+    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+  });
+}
+
+function makeResize(imgEl,rz){
+  rz.addEventListener('mousedown',e=>{
+    e.preventDefault();e.stopPropagation();
+    const sx=e.clientX,sw=imgEl.offsetWidth;
+    const mv=e2=>{imgEl.style.width=Math.max(40,sw+e2.clientX-sx)+'px';};
+    const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);dirty=true;};
+    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+  });
+}
+
+function removeAnn(el){
+  if(!el)return;
+  if(anns[curPage])anns[curPage]=anns[curPage].filter(a=>a.el!==el);
+  el.remove();selAnn=null;dirty=true;
+}
+
+// ── Add pages ─────────────────────────────────────────────────
 async function addPages(){
   if(!window.api)return;
   const r=await window.api.openDialog({title:'Add PDF or Images',filters:[{name:'PDF & Images',extensions:['pdf','jpg','jpeg','png','webp','bmp']}],properties:['openFile','multiSelections']});
@@ -460,8 +513,7 @@ async function addPages(){
     }else{
       const ib=new Uint8Array(buf instanceof ArrayBuffer?buf:buf.buffer);
       let im;try{im=await pdfDoc.embedPng(ib);}catch{im=await pdfDoc.embedJpg(ib);}
-      const pg=pdfDoc.addPage([im.width,im.height]);
-      pg.drawImage(im,{x:0,y:0,width:im.width,height:im.height});
+      const pg=pdfDoc.addPage([im.width,im.height]);pg.drawImage(im,{x:0,y:0,width:im.width,height:im.height});
     }
     prog(10+Math.round((i+1)/r.filePaths.length*80));
   }
@@ -475,10 +527,9 @@ async function reload(bytes){
   await renderThumbs();await renderPage(Math.min(curPage,pgCount-1));
 }
 
-// ── OCR ────────────────────────────────────────────────────────
+// ── OCR ───────────────────────────────────────────────────────
 async function runOCR(){
-  if(!pdfJSDoc)return;
-  msg('Running OCR…');prog(10);
+  if(!pdfJSDoc)return;msg('Running OCR…');prog(10);
   document.getElementById('oc').textContent='Processing…';
   if(typeof Tesseract==='undefined'){
     try{await ldScript('https://unpkg.com/tesseract.js@5.0.4/dist/tesseract.min.js');}
@@ -489,17 +540,34 @@ async function runOCR(){
     const res=await Tesseract.recognize(dataUrl,'eng',{logger:m=>{if(m.status==='recognizing text')prog(10+Math.round(m.progress*80));}});
     document.getElementById('oc').textContent=res.data.text.trim()||'(No text detected)';
     prog(100);msg('OCR complete');
-  }catch(e){document.getElementById('oc').textContent='Failed: '+e.message;prog(100);}
+  }catch(e){document.getElementById('oc').textContent='Failed.';prog(100);}
 }
 
-// ── Compress ───────────────────────────────────────────────────
+// ── Compress ──────────────────────────────────────────────────
+function updateCmpLabel(){
+  const v=parseInt(document.getElementById('cmp-lvl').value);
+  const labels=['','Light — minimal quality loss','Medium — good balance','High — smallest file size'];
+  const hints=['','Best for documents with images. Small size reduction.','Balances file size and quality. Good for most documents.','Maximum compression. May reduce image quality.'];
+  document.getElementById('cmp-val').textContent=labels[v];
+  document.getElementById('cmp-hint').textContent=hints[v];
+}
+function showCompress(){
+  if(!pdfDoc)return;
+  updateCmpLabel();
+  document.getElementById('cmp-modal').classList.add('show');
+}
 async function doCompress(){
-  if(!pdfDoc)return;msg('Compressing…');prog(40);
-  const bytes=await pdfDoc.save({useObjectStreams:true,addDefaultPage:false,objectsPerTick:50});
-  await reload(bytes);dirty=true;prog(100);msg('Compressed');
+  document.getElementById('cmp-modal').classList.remove('show');
+  if(!pdfDoc)return;
+  msg('Compressing…');prog(30);
+  const lvl=parseInt(document.getElementById('cmp-lvl').value);
+  const opts={useObjectStreams:true,addDefaultPage:false,objectsPerTick:lvl===3?20:lvl===2?50:100};
+  const bytes=await pdfDoc.save(opts);
+  await reload(bytes);dirty=true;prog(100);
+  msg(`Compressed (level ${lvl}) — use Save to write to disk`);
 }
 
-// ── Page ops ───────────────────────────────────────────────────
+// ── Page ops ──────────────────────────────────────────────────
 async function delPage(){delPageAt(curPage);}
 async function delPageAt(idx){
   if(!pdfDoc||pgCount<=1)return;
@@ -513,9 +581,9 @@ async function movePg(dir){
   const bytes=await pdfDoc.save();curPage=ni;await reload(bytes);dirty=true;
 }
 
-// ── Save ───────────────────────────────────────────────────────
-async function doSave(){doSaveAs(false);}
-async function doSaveAs(forceAs=true){
+// ── Save ──────────────────────────────────────────────────────
+async function doSave(){doSaveAs();}
+async function doSaveAs(){
   if(!pdfDoc||!window.api)return;
   msg('Saving…');prog(20);
   await bake();prog(60);
@@ -540,21 +608,21 @@ async function bake(){
       const el=ann.el;
       const x=parseFloat(el.style.left)*sx;
       const yTop=parseFloat(el.style.top)*sy;
-      const y=pdfPg.getHeight()-yTop-18;
+      const y=pdfPg.getHeight()-yTop-16;
       if(ann.type==='text'){
-        const te=ann.textEl||el.querySelector('.at');
-        const txt=te?te.textContent:'';if(!txt.trim())continue;
-        const fs=Math.max(6,parseFloat((te||el).style.fontSize||'14')*sx);
-        const col=h2r((te||el).style.color||'#000');
-        pdfPg.drawText(txt,{x,y,size:fs,font,color:rgb(col.r,col.g,col.b),maxWidth:600});
+        const te=ann.textEl;if(!te)continue;
+        const txt=te.innerText||te.textContent||'';if(!txt.trim())continue;
+        const fs=Math.max(6,parseFloat(te.style.fontSize||'14')*sx);
+        const col=h2r(te.style.color||'#000');
+        pdfPg.drawText(txt,{x,y,size:fs,font,color:rgb(col.r,col.g,col.b),maxWidth:pdfPg.getWidth()-x-10});
       }else if(ann.type==='image'&&ann.buf){
         try{
           const ib=new Uint8Array(ann.buf instanceof ArrayBuffer?ann.buf:ann.buf.buffer);
-          const imgEl=ann.imgEl||el.querySelector('img');
-          const w=parseFloat(imgEl.style.width||'220')*sx;
+          const imgEl=ann.imgEl;
+          const w=imgEl.offsetWidth*sx;
           const h=imgEl.naturalHeight/imgEl.naturalWidth*w;
           let im;try{im=await pdfDoc.embedPng(ib);}catch{im=await pdfDoc.embedJpg(ib);}
-          pdfPg.drawImage(im,{x,y:y-h+18,width:w,height:h});
+          pdfPg.drawImage(im,{x,y:y-h+16,width:w,height:h});
         }catch{}
       }
     }
@@ -562,44 +630,7 @@ async function bake(){
   anns={};
 }
 
-// ── Drag ───────────────────────────────────────────────────────
-function makeDrag(wrap, handle){
-  handle.addEventListener('mousedown',e=>{
-    if(e.target.classList&&(e.target.classList.contains('rz')||e.target.tagName==='BUTTON'))return;
-    if(handle.classList&&handle.classList.contains('at'))return; // let text be edited
-    e.preventDefault();
-    select(wrap);
-    const ox=parseFloat(wrap.style.left)||0,oy=parseFloat(wrap.style.top)||0;
-    const sx=e.clientX,sy=e.clientY;
-    const mv=e2=>{wrap.style.left=(ox+e2.clientX-sx)+'px';wrap.style.top=(oy+e2.clientY-sy)+'px';};
-    const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);dirty=true;};
-    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
-  });
-  // For text: drag only on the wrap border, not the text itself
-  wrap.addEventListener('mousedown',e=>{
-    if(e.target===handle)return; // handled above
-    if(e.target.tagName==='BUTTON')return;
-    e.preventDefault();
-    select(wrap);
-    const ox=parseFloat(wrap.style.left)||0,oy=parseFloat(wrap.style.top)||0;
-    const sx=e.clientX,sy=e.clientY;
-    const mv=e2=>{wrap.style.left=(ox+e2.clientX-sx)+'px';wrap.style.top=(oy+e2.clientY-sy)+'px';};
-    const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);dirty=true;};
-    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
-  });
-}
-
-function makeResize(imgEl,rz){
-  rz.addEventListener('mousedown',e=>{
-    e.preventDefault();e.stopPropagation();
-    const sx=e.clientX,sw=imgEl.offsetWidth;
-    const mv=e2=>{imgEl.style.width=Math.max(40,sw+e2.clientX-sx)+'px';};
-    const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);dirty=true;};
-    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
-  });
-}
-
-// ── Zoom ───────────────────────────────────────────────────────
+// ── Zoom ──────────────────────────────────────────────────────
 async function doZoom(d){setZoom(zoom+d);}
 async function setZoom(z){
   zoom=Math.max(.25,Math.min(4,z));
