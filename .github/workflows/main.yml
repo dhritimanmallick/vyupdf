@@ -1,0 +1,79 @@
+name: Build VyuPDF
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Write package.json
+        working-directory: VyuPDF-source/vyupdf-win
+        run: |
+          @"
+          {
+            "name": "vyupdf",
+            "version": "1.0.0",
+            "description": "VyuPDF - Lightweight PDF Editor",
+            "main": "src/main.js",
+            "author": "Vyuhaa Med Data Private Limited",
+            "license": "Apache-2.0",
+            "repository": "https://github.com/dhritimanmallick/vyupdf",
+            "scripts": {
+              "build:win": "electron-builder --win"
+            },
+            "dependencies": {
+              "pdf-lib": "^1.17.1"
+            },
+            "devDependencies": {
+              "electron": "^29.4.6",
+              "electron-builder": "^24.13.3"
+            },
+            "build": {
+              "appId": "com.vyuhaadata.vyupdf",
+              "productName": "VyuPDF",
+              "copyright": "Copyright 2026 Vyuhaa Med Data Private Limited",
+              "asar": true,
+              "files": ["src/**/*", "assets/**/*", "node_modules/**/*"],
+              "win": {
+                "target": [{"target": "nsis", "arch": ["x64"]}],
+                "requestedExecutionLevel": "asInvoker"
+              },
+              "nsis": {
+                "oneClick": false,
+                "allowToChangeInstallationDirectory": true,
+                "createDesktopShortcut": true,
+                "createStartMenuShortcut": true,
+                "shortcutName": "VyuPDF"
+              },
+              "publish": null
+            }
+          }
+          "@ | Out-File -FilePath package.json -Encoding utf8
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: VyuPDF-source/vyupdf-win
+
+      - name: Build Windows installer
+        run: npm run build:win
+        working-directory: VyuPDF-source/vyupdf-win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+          EP_DRAFT: false
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: VyuPDF-Windows-Setup
+          path: VyuPDF-source/vyupdf-win/dist/*.exe
+          retention-days: 30
